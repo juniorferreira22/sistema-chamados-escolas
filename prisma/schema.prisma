@@ -1,0 +1,166 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SCHOOL
+  TECHNICIAN
+}
+
+enum TicketStatus {
+  ABERTO
+  EM_ATENDIMENTO
+  CONCLUIDO_AGUARDANDO_FEEDBACK
+  PENDENTE_TERCEIROS
+  FINALIZADO
+  CANCELADO
+  NAO_RESOLVIDO
+}
+
+enum TicketCategory {
+  SOFTWARE
+  HARDWARE
+  OFFICE
+  IMPRESSORA
+  REDE
+  OUTRO
+}
+
+model User {
+  id        String   @id @default(cuid())
+  login     String   @unique
+  password  String
+  name      String
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // School specific fields
+  school    School?
+
+  // Technician specific fields
+  technician Technician?
+
+  // Tickets created by this user
+  ticketsCreated Ticket[] @relation("TicketCreator")
+
+  @@map("users")
+}
+
+model School {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  address   String
+  phone     String
+  email     String
+  district  String?  // Distrito/Região
+  inep      String?  // Código INEP da escola
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("schools")
+}
+
+model Technician {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  occupation String   // Cargo/Função
+  phone      String?
+  email      String?
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Tickets assigned to this technician
+  assignedTickets Ticket[] @relation("AssignedTechnician")
+
+  @@map("technicians")
+}
+
+model Ticket {
+  id              String         @id @default(cuid())
+  title           String
+  description     String         @db.Text
+  category        TicketCategory
+  categoryDetail  String?        // Para quando categoria = OUTRO
+  status          TicketStatus   @default(ABERTO)
+  priority        String         @default("NORMAL") // BAIXA, NORMAL, ALTA, URGENTE
+  
+  createdById     String
+  createdBy       User           @relation("TicketCreator", fields: [createdById], references: [id])
+  
+  assignedToId    String?
+  assignedTo      Technician?    @relation("AssignedTechnician", fields: [assignedToId], references: [id])
+  
+  createdAt       DateTime       @default(now())
+  validUntil      DateTime       // 3 dias úteis após criação
+  resolvedAt      DateTime?
+  updatedAt       DateTime       @updatedAt
+  
+  // Feedback
+  feedback        Feedback?
+  
+  // Histórico de alterações
+  history         TicketHistory[]
+  
+  // Anexos/Comentários (para futuras expansões)
+  comments        Comment[]
+
+  @@map("tickets")
+}
+
+model Feedback {
+  id          String   @id @default(cuid())
+  ticketId    String   @unique
+  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  rating      Int      // 1 a 5
+  comment     String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  @@map("feedbacks")
+}
+
+model TicketHistory {
+  id          String       @id @default(cuid())
+  ticketId    String
+  ticket      Ticket       @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  action      String       // "CRIADO", "ATRIBUIDO", "STATUS_ALTERADO", etc
+  oldValue    String?
+  newValue    String?
+  description String?      @db.Text
+  
+  createdBy   String       // Nome do usuário que fez a ação
+  createdAt   DateTime     @default(now())
+
+  @@map("ticket_history")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  content   String   @db.Text
+  author    String   // Nome do autor
+  authorId  String   // ID do autor
+  isInternal Boolean @default(false) // Comentário interno (apenas técnicos)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
