@@ -1,6 +1,6 @@
 # 🏫 Sistema de Chamados - Escolas Municipais
 
-Sistema completo de gerenciamento de chamados de suporte técnico para as escolas municipais de Santa Cruz das Palmeiras, SP.
+Sistema completo de gerenciamento de chamados de suporte técnico para as escolas municipais de Guariba, SP.
 
 ## 📋 Sobre o Sistema
 
@@ -256,7 +256,7 @@ Para dúvidas ou problemas:
 
 ## 📄 Licença
 
-Este sistema foi desenvolvido para uso da Prefeitura Municipal de Santa Cruz das Palmeiras, SP.
+Este sistema foi desenvolvido para uso da Prefeitura Municipal de Guariba, SP.
 
 ---
 
