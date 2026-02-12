@@ -21,7 +21,7 @@ export async function POST(request) {
         technician: true,
       },
     })
-
+    
     if (!user) {
       return NextResponse.json(
         { error: 'Credenciais inválidas' },

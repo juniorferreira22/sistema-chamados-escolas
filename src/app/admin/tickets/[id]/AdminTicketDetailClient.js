@@ -255,17 +255,17 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
           )}
 
           {/* Histórico */}
-          {ticket.history.length > 0 && (
+          {ticket.history?.length > 0 && (
             <div className="card">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Histórico</h2>
               <div className="space-y-4">
-                {ticket.history.map((item, index) => (
+                {ticket.history?.map((item, index) => (
                   <div key={item.id} className="flex gap-4">
                     <div className="flex flex-col items-center">
                       <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 text-xs font-medium shrink-0">
                         {item.createdBy.charAt(0)}
                       </div>
-                      {index < ticket.history.length - 1 && (
+                      {index < ticket.history?.length - 1 && (
                         <div className="w-0.5 flex-1 bg-slate-200 my-2" />
                       )}
                     </div>

@@ -4,7 +4,8 @@ import prisma from '@/lib/prisma'
 import Header from '@/components/Header'
 import AdminTicketDetailClient from './AdminTicketDetailClient'
 
-export default async function AdminTicketDetail({ params }) {
+export default async function AdminTicketDetail({ params: paramsPromise }) {
+  const params = await paramsPromise
   const session = await getSession()
 
   if (!session) {

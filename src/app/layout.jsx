@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'], variable: '--font-geist-sans' })
 
 export const metadata = {
-  title: 'Sistema de Chamados - Escolas Municipais',
+  title: 'iTicket - Sistema de Chamados para Escolas Municipaisq',
   description: 'Plataforma de gerenciamento de chamados de suporte técnico para escolas municipais',
 }
 

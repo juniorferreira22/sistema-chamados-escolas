@@ -25,7 +25,7 @@ export function verifyToken(token) {
 }
 
 export async function getSession() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const token = cookieStore.get('auth-token')
   
   if (!token) return null
@@ -35,7 +35,7 @@ export async function getSession() {
 }
 
 export async function setAuthCookie(token) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   cookieStore.set('auth-token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -46,6 +46,6 @@ export async function setAuthCookie(token) {
 }
 
 export async function clearAuthCookie() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   cookieStore.delete('auth-token')
 }

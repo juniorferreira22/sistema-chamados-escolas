@@ -3,7 +3,8 @@ import prisma from '@/lib/prisma'
 import { getSession } from '@/lib/auth'
 
 // GET - Buscar ticket específico
-export async function GET(request, { params }) {
+export async function GET(request, { params: paramsPromise }) {
+  const params = await paramsPromise
   try {
     const session = await getSession()
     
@@ -74,7 +75,8 @@ export async function GET(request, { params }) {
 }
 
 // PATCH - Atualizar ticket
-export async function PATCH(request, { params }) {
+export async function PATCH(request, { params: paramsPromise }) {
+  const params = await paramsPromise
   try {
     const session = await getSession()
     
