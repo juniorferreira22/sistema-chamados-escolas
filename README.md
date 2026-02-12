@@ -248,12 +248,6 @@ Substitua o SVG no componente de login e header por sua logo personalizada.
 - Rode `npm run build` para verificar erros
 - Veja o console do navegador para mais detalhes
 
-## 📞 Suporte
-
-Para dúvidas ou problemas:
-- Email: suporte.ti@educacao.santacruz.sp.gov.br
-- Abra um chamado no próprio sistema!
-
 ## 📄 Licença
 
 Este sistema foi desenvolvido para uso da Prefeitura Municipal de Guariba, SP.
