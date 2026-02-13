@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 export default function CreateRegisterClient() {
   const router = useRouter()
-  const [type, setType] = useState('user')
+  const [type, setType] = useState('technician')
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
@@ -31,8 +31,8 @@ export default function CreateRegisterClient() {
       if (!res.ok) {
         setMessage({ type: 'error', text: data.error || 'Erro' })
       } else {
-        setMessage({ type: 'success', text: 'Cadastro realizadocom sucesso' })
-        // Limpar os campos do formul\u00e1rio
+        setMessage({ type: 'success', text: 'Cadastro realizado com sucesso' })
+        // Limpar os campos do formulario
         setLogin('')
         setPassword('')
         setName('')
@@ -52,7 +52,6 @@ export default function CreateRegisterClient() {
       <div>
         <label className="block text-sm font-medium text-gray-900 mb-3">Tipo de conta</label>
         <div className="inline-flex rounded-lg bg-gray-100 p-1 gap-1">
-          <button type="button" onClick={() => setType('user')} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${type === 'user' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'}`}>Usuário</button>
           <button type="button" onClick={() => setType('technician')} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${type === 'technician' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'}`}>Técnico</button>
           <button type="button" onClick={() => setType('school')} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${type === 'school' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'}`}>Escola</button>
         </div>
@@ -72,16 +71,6 @@ export default function CreateRegisterClient() {
           <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome completo" className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
         </div>
       </div>
-
-      {type === 'user' && (
-        <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">Papel</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-            <option value="SCHOOL">Escola</option>
-            <option value="TECHNICIAN">Técnico</option>
-          </select>
-        </div>
-      )}
 
       {type === 'technician' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
