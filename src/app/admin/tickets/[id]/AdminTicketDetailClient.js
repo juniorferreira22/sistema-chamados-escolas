@@ -255,7 +255,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
           )}
 
           {/* Histórico */}
-          {ticket.history?.length > 0 && (
+          {ticket?.history?.length > 0 && (
             <div className="card">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Histórico</h2>
               <div className="space-y-4">
