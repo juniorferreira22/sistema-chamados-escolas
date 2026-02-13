@@ -52,7 +52,7 @@ export default async function SchoolTicketDetail({ params: paramsPromise }) {
           createdAt: 'desc',
         },
         where: {
-          isInternal: false, // Apenas comentários públicos
+      // Apenas para verificação de comentários do lado do servidor
         },
       },
     },
@@ -62,7 +62,7 @@ export default async function SchoolTicketDetail({ params: paramsPromise }) {
     redirect('/escola/dashboard')
   }
 
-  // Verificar se o ticket pertence à escola
+  // Verifica se o ticket existe e pertence à escola
   if (ticket.createdById !== session.userId) {
     redirect('/escola/dashboard')
   }

@@ -13,7 +13,7 @@ export async function POST(request) {
       )
     }
 
-    // Buscar usuário
+    // Procura o usuário no banco de dados
     const user = await prisma.user.findUnique({
       where: { login },
       include: {
@@ -29,7 +29,7 @@ export async function POST(request) {
       )
     }
 
-    // Verificar senha
+    // Compara a senha fornecida com a armazenada
     const isValidPassword = await comparePasswords(password, user.password)
 
     if (!isValidPassword) {
@@ -39,7 +39,7 @@ export async function POST(request) {
       )
     }
 
-    // Gerar token
+    // Cria o token de autenticação
     const token = generateToken({
       userId: user.id,
       login: user.login,
@@ -47,10 +47,10 @@ export async function POST(request) {
       role: user.role,
     })
 
-    // Setar cookie
+    // Armazena o token nos cookies
     await setAuthCookie(token)
 
-    // Retornar dados do usuário (sem a senha)
+    // Retorna os dados do usuário sem a senha
     const { password: _, ...userWithoutPassword } = user
 
     return NextResponse.json({

@@ -22,7 +22,7 @@ export default async function AdminDashboard() {
     },
   })
 
-  // Buscar todos os tickets
+  // Busca todos os tickets do sistema
   const tickets = await prisma.ticket.findMany({
     include: {
       createdBy: {
@@ -49,7 +49,7 @@ export default async function AdminDashboard() {
     },
   })
 
-  // Buscar todos os técnicos
+  // Lista todos os técnicos disponíveis para atribuição
   const technicians = await prisma.technician.findMany({
     include: {
       user: {
@@ -61,7 +61,7 @@ export default async function AdminDashboard() {
     },
   })
 
-  // Estatísticas
+  // Cálculo das estatísticas principais do painel
   const stats = {
     total: tickets.length,
     abertos: tickets.filter(t => t.status === 'ABERTO').length,

@@ -12,6 +12,7 @@ datasource db {
 enum UserRole {
   SCHOOL
   TECHNICIAN
+  ADMIN
 }
 
 enum TicketStatus {

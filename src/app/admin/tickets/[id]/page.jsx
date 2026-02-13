@@ -57,7 +57,7 @@ export default async function AdminTicketDetail({ params: paramsPromise }) {
     redirect('/admin/dashboard')
   }
 
-  // Buscar todos os técnicos para atribuição
+  // Fornece de todos os técnicos para seleção e atribuição
   const technicians = await prisma.technician.findMany({
     include: {
       user: {

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import {
   getStatusColor,
   getStatusLabel,
@@ -79,24 +78,10 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
   }
 
   return (
-    <>
-      {/* Breadcrumb */}
-      <div className="mb-6">
-        <Link
-          href="/admin/dashboard"
-          className="inline-flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-medium"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Voltar para Dashboard
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Coluna principal */}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Coluna com o detalhamento principal do ticket */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Header do chamado */}
+          {/* Informações básicas do chamado */}
           <div className="card">
             <div className="flex items-start gap-4 mb-6">
               <span className="text-3xl">{getCategoryIcon(ticket.category)}</span>
@@ -176,7 +161,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
             </div>
           </div>
 
-          {/* Descrição */}
+          {/* Descrição detalhada do problema */}
           <div className="card">
             <h2 className="text-lg font-semibold text-slate-900 mb-4">Descrição</h2>
             <p className="text-slate-700 whitespace-pre-wrap">{ticket.description}</p>
@@ -190,7 +175,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
             )}
           </div>
 
-          {/* Informações da escola */}
+          {/* Informações da escola que criou o chamado */}
           {ticket.createdBy.school && (
             <div className="card">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Informações da Escola</h2>
@@ -225,7 +210,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
             </div>
           )}
 
-          {/* Feedback */}
+          {/* Avaliação fornecida pela escola */}
           {ticket.feedback && (
             <div className="card">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Feedback da Escola</h2>
@@ -255,7 +240,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
             </div>
           )}
 
-          {/* Histórico */}
+          {/* Registro de todas as mudanças do ticket */}
           {ticket?.history?.length > 0 && (
             <div className="card">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Histórico</h2>
@@ -284,9 +269,9 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
           )}
         </div>
 
-        {/* Coluna lateral - Ações */}
+        {/* Seção com principais ações que podem ser realizadas */}
         <div className="space-y-6">
-          {/* Atribuição */}
+          {/* Opção para atribuir técnico responsável */}
           <div className="card">
             <h3 className="font-semibold text-slate-900 mb-4">Atribuição</h3>
             
@@ -335,7 +320,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
             </div>
           </div>
 
-          {/* Status */}
+          {/* Mudança de status do chamado */}
           <div className="card">
             <h3 className="font-semibold text-slate-900 mb-4">Mudar Status</h3>
             <div className="space-y-2">
@@ -361,7 +346,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
             </div>
           </div>
 
-          {/* Informações adicionais */}
+          {/* Dados adicionais como prioridade e datas */}
           <div className="card bg-slate-50">
             <h3 className="font-semibold text-slate-900 mb-3">Informações</h3>
             <div className="space-y-2 text-sm">
@@ -379,6 +364,5 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
           </div>
         </div>
       </div>
-    </>
   )
 }

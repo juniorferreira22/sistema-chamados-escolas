@@ -42,7 +42,7 @@ export async function POST(request, { params: paramsPromise }) {
       )
     }
 
-    // Verificar se é o criador do ticket
+    // Verifica se o usuário é o criador do ticket
     if (ticket.createdById !== session.userId) {
       return NextResponse.json(
         { error: 'Sem permissão para avaliar este chamado' },
@@ -50,7 +50,7 @@ export async function POST(request, { params: paramsPromise }) {
       )
     }
 
-    // Verificar se o ticket está no status correto
+    // Valida se o status permite envio de feedback
     if (ticket.status !== 'CONCLUIDO_AGUARDANDO_FEEDBACK') {
       return NextResponse.json(
         { error: 'Chamado não está aguardando feedback' },
@@ -58,7 +58,7 @@ export async function POST(request, { params: paramsPromise }) {
       )
     }
 
-    // Criar feedback e atualizar status do ticket
+    // Registra o feedback e marca como finalizado
     const [feedback, updatedTicket] = await prisma.$transaction([
       prisma.feedback.create({
         data: {
@@ -76,7 +76,7 @@ export async function POST(request, { params: paramsPromise }) {
       }),
     ])
 
-    // Criar entrada no histórico
+    // Registra a conclusião com base no feedback
     await prisma.ticketHistory.create({
       data: {
         ticketId: params.id,

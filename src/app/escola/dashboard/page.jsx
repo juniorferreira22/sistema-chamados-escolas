@@ -15,7 +15,7 @@ export default async function SchoolDashboard() {
     redirect('/admin/dashboard')
   }
 
-  // Buscar dados do usuário
+  // Recupera as informações da escola logada
   const user = await prisma.user.findUnique({
     where: { id: session.userId },
     include: {
@@ -23,7 +23,7 @@ export default async function SchoolDashboard() {
     },
   })
 
-  // Buscar tickets da escola
+  // Lista todos os chamados da escola
   const tickets = await prisma.ticket.findMany({
     where: {
       createdById: session.userId,
@@ -46,7 +46,7 @@ export default async function SchoolDashboard() {
     },
   })
 
-  // Estatísticas
+  // Cálculo dos dados de resumo do painel
   const stats = {
     total: tickets.length,
     abertos: tickets.filter(t => t.status === 'ABERTO').length,

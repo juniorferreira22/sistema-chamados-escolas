@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getSession } from '@/lib/auth'
 
-// GET - Buscar ticket específico
+// Recupera os detalhes de um ticket específo
 export async function GET(request, { params: paramsPromise }) {
   const params = await paramsPromise
   try {
@@ -56,7 +56,7 @@ export async function GET(request, { params: paramsPromise }) {
       )
     }
 
-    // Verificar permissão
+    // Valida se o usuário tem permissão de acesso
     if (session.role === 'SCHOOL' && ticket.createdById !== session.userId) {
       return NextResponse.json(
         { error: 'Sem permissão para acessar este chamado' },
@@ -74,7 +74,7 @@ export async function GET(request, { params: paramsPromise }) {
   }
 }
 
-// PATCH - Atualizar ticket
+// Atualiza informações de um ticket existente
 export async function PATCH(request, { params: paramsPromise }) {
   const params = await paramsPromise
   try {
@@ -101,7 +101,7 @@ export async function PATCH(request, { params: paramsPromise }) {
       )
     }
 
-    // Apenas técnicos podem atualizar tickets
+    // Apenas técnicos podem fazer mudanças
     if (session.role !== 'TECHNICIAN') {
       return NextResponse.json(
         { error: 'Sem permissão para atualizar chamados' },
@@ -112,7 +112,7 @@ export async function PATCH(request, { params: paramsPromise }) {
     const updateData = {}
     const historyEntries = []
 
-    // Atualizar status
+    // Atualiza o status quando o requesteção especificar
     if (status && status !== ticket.status) {
       updateData.status = status
       
@@ -130,7 +130,7 @@ export async function PATCH(request, { params: paramsPromise }) {
       })
     }
 
-    // Atribuir técnico
+    // Atribui técnico ao chamado
     if (assignedToId !== undefined) {
       if (assignedToId === null) {
         updateData.assignedToId = null
@@ -165,7 +165,7 @@ export async function PATCH(request, { params: paramsPromise }) {
       }
     }
 
-    // Atualizar prioridade
+    // Define o nível de importância do chamado
     if (priority && priority !== ticket.priority) {
       updateData.priority = priority
       historyEntries.push({
@@ -178,7 +178,7 @@ export async function PATCH(request, { params: paramsPromise }) {
       })
     }
 
-    // Atualizar ticket
+    // Persiste as mudanças no banco de dados
     const updatedTicket = await prisma.ticket.update({
       where: { id: params.id },
       data: updateData,
@@ -204,7 +204,7 @@ export async function PATCH(request, { params: paramsPromise }) {
       },
     })
 
-    // Criar entradas no histórico
+    // Registra o histórico de cada mudança
     if (historyEntries.length > 0) {
       await prisma.ticketHistory.createMany({
         data: historyEntries,

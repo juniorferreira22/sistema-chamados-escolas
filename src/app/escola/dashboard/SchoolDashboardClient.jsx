@@ -125,7 +125,7 @@ export default function SchoolDashboardClient({ user, initialTickets, stats }) {
         </div>
       )}
 
-      {/* Modal de novo chamado */}
+      {/* Modal para criar um novo chamado */}
       {showNewTicketModal && (
         <NewTicketModal
           onClose={() => setShowNewTicketModal(false)}

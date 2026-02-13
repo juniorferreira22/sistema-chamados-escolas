@@ -27,7 +27,7 @@ export default function LoginPage() {
         throw new Error(data.error || 'Erro ao fazer login')
       }
 
-      // Redirecionar baseado no tipo de usuário
+      // Redireciona para o painel correto conforme o tipo de usuário logado
       if (data.user.role === 'SCHOOL') {
         router.push('/escola/dashboard')
       } else if (data.user.role === 'TECHNICIAN') {
@@ -44,14 +44,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-3 sm:p-4">
-      {/* Background decorativo */}
+      {/* Efeito de fundo com bolas desfocadas */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-64 h-64 sm:w-72 sm:h-72 bg-primary-200/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-80 h-80 sm:w-96 sm:h-96 bg-accent-200/20 rounded-full blur-3xl"></div>
       </div>
 
       <div className="w-full max-w-sm sm:max-w-md relative z-10">
-        {/* Logo e título */}
+        {/* Título e ícone da aplicação */}
         <div className="text-center mb-8 sm:mb-10 animate-fade-in">
           <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-lg mb-4 sm:mb-6">
             <svg
@@ -74,7 +74,7 @@ export default function LoginPage() {
           <p className="text-slate-600 text-sm sm:text-base">Escolas Municipais</p>
         </div>
 
-        {/* Card de login */}
+        {/* Formulário de login */}
         <div className="glass rounded-2xl p-6 sm:p-8 shadow-xl animate-slide-up">
           <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
             <div>
@@ -185,7 +185,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Informações adicionais */}
+        {/* Informações de contato e suporte */}
         <div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-slate-600 px-2">
           <p className="mb-1">Em caso de problemas com acesso, contate:</p>
           <p className="font-semibold text-primary-600">

@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma'
 import { getSession } from '@/lib/auth'
 import { calculateValidUntil } from '@/lib/utils'
 
-// GET - Listar tickets
+// Lista os tickets conforme a permissão do usuário
 export async function GET(request) {
   try {
     const session = await getSession()
@@ -21,12 +21,12 @@ export async function GET(request) {
 
     let where = {}
 
-    // Filtrar por role do usuário
+    // Filtra os tickets de acordo com o perfil
     if (session.role === 'SCHOOL') {
       where.createdById = session.userId
     }
 
-    // Aplicar filtros adicionais
+    // Aplica filtros adicionados no request
     if (status) {
       where.status = status
     }
@@ -72,7 +72,7 @@ export async function GET(request) {
   }
 }
 
-// POST - Criar novo ticket
+// Registra um novo chamado no sistema
 export async function POST(request) {
   try {
     const session = await getSession()
@@ -84,7 +84,7 @@ export async function POST(request) {
       )
     }
 
-    // Apenas escolas podem criar tickets
+    // Somente escolas podem criar chamados
     if (session.role !== 'SCHOOL') {
       return NextResponse.json(
         { error: 'Apenas escolas podem criar chamados' },
@@ -102,10 +102,10 @@ export async function POST(request) {
       )
     }
 
-    // Calcular data de validade (3 dias úteis)
+    // Calcula quando o chamado expires
     const validUntil = calculateValidUntil()
 
-    // Criar ticket
+    // Cria o chamado no banco de dados
     const ticket = await prisma.ticket.create({
       data: {
         title,
@@ -127,7 +127,7 @@ export async function POST(request) {
       },
     })
 
-    // Criar registro no histórico
+    // Registra a criação no histórico
     await prisma.ticketHistory.create({
       data: {
         ticketId: ticket.id,
