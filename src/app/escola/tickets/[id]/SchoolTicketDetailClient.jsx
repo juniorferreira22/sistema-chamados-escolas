@@ -11,6 +11,7 @@ import {
   formatDate,
   getRelativeTime,
   isTicketOverdue,
+  formatHistoryMessage,
 } from '@/lib/utils'
 
 export default function SchoolTicketDetailClient({ ticket: initialTicket }) {
@@ -200,7 +201,7 @@ export default function SchoolTicketDetailClient({ ticket: initialTicket }) {
                       {getRelativeTime(item.createdAt)}
                     </span>
                   </div>
-                  <p className="text-sm text-slate-700">{item.description}</p>
+                  <p className="text-sm text-slate-700">{formatHistoryMessage(item.description)}</p>
                 </div>
               </div>
             ))}

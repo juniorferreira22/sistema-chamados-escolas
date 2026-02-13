@@ -109,3 +109,30 @@ export function isTicketOverdue(validUntil, status) {
   }
   return new Date() > new Date(validUntil)
 }
+
+/**
+ * Converte mensagens de histórico com status bruto para texto legível
+ */
+export function formatHistoryMessage(description) {
+  if (!description) return description
+
+  const statusMap = {
+    'ABERTO': '📝 Aberto',
+    'EM_ATENDIMENTO': '🔧 Em Atendimento',
+    'CONCLUIDO_AGUARDANDO_FEEDBACK': '✅ Concluído (Aguardando Feedback)',
+    'PENDENTE_TERCEIROS': '⏳ Pendente - Terceiros',
+    'FINALIZADO': '⭐ Finalizado',
+    'CANCELADO': '❌ Cancelado',
+    'NAO_RESOLVIDO': 'Não Resolvido',
+  }
+
+  let formattedText = description
+
+  // Substitui os valores de status brutos pelos rótulos amigáveis
+  Object.entries(statusMap).forEach(([rawValue, label]) => {
+    const regex = new RegExp(`\\b${rawValue}\\b`, 'g')
+    formattedText = formattedText.replace(regex, label)
+  })
+
+  return formattedText
+}
