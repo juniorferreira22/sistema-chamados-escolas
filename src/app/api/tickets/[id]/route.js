@@ -179,9 +179,20 @@ export async function PATCH(request, { params: paramsPromise }) {
     }
 
     // Persiste as mudanças no banco de dados
-    const updatedTicket = await prisma.ticket.update({
+    await prisma.ticket.update({
       where: { id: params.id },
       data: updateData,
+    })
+
+    // Registra o histórico de cada mudança
+    if (historyEntries.length > 0) {
+      await prisma.ticketHistory.createMany({
+        data: historyEntries,
+      })
+    }
+
+    const updatedTicket = await prisma.ticket.findUnique({
+      where: { id: params.id },
       include: {
         createdBy: {
           select: {
@@ -201,15 +212,18 @@ export async function PATCH(request, { params: paramsPromise }) {
           },
         },
         feedback: true,
+        comments: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+        history: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
       },
     })
-
-    // Registra o histórico de cada mudança
-    if (historyEntries.length > 0) {
-      await prisma.ticketHistory.createMany({
-        data: historyEntries,
-      })
-    }
 
     return NextResponse.json({
       ticket: updatedTicket,

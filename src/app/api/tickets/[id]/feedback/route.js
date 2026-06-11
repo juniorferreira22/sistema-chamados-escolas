@@ -59,7 +59,7 @@ export async function POST(request, { params: paramsPromise }) {
     }
 
     // Registra o feedback e marca como finalizado
-    const [feedback, updatedTicket] = await prisma.$transaction([
+    const [feedback] = await prisma.$transaction([
       prisma.feedback.create({
         data: {
           ticketId: params.id,
@@ -84,6 +84,40 @@ export async function POST(request, { params: paramsPromise }) {
         newValue: finalStatus,
         description: `Feedback enviado com avaliação ${rating}/5. Status final: ${finalStatus}`,
         createdBy: session.name,
+      },
+    })
+
+    const updatedTicket = await prisma.ticket.findUnique({
+      where: { id: params.id },
+      include: {
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+            login: true,
+          },
+        },
+        assignedTo: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        feedback: true,
+        history: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+        comments: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
       },
     })
 

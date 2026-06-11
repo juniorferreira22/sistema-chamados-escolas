@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import TicketComments from '@/components/TicketComments'
 import {
   getStatusColor,
   getStatusLabel,
@@ -140,6 +141,14 @@ export default function SchoolTicketDetailClient({ ticket: initialTicket }) {
             </p>
           </div>
         )}
+      </div>
+
+      <div className="mb-6">
+        <TicketComments
+          ticket={ticket}
+          currentUserId={ticket.createdById}
+          onCommentsChange={(comments) => setTicket({ ...ticket, comments })}
+        />
       </div>
 
       {/* Feedback (se já foi enviado) */}

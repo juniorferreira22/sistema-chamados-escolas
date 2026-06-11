@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import TicketComments from '@/components/TicketComments'
 import {
   getStatusColor,
   getStatusLabel,
@@ -13,7 +14,7 @@ import {
   formatHistoryMessage,
 } from '@/lib/utils'
 
-export default function AdminTicketDetailClient({ ticket: initialTicket, technicians, currentTechnicianId }) {
+export default function AdminTicketDetailClient({ ticket: initialTicket, technicians, currentTechnicianId, currentUserId }) {
   const router = useRouter()
   const [ticket, setTicket] = useState(initialTicket)
   const [loading, setLoading] = useState(false)
@@ -174,6 +175,12 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
               </div>
             )}
           </div>
+
+          <TicketComments
+            ticket={ticket}
+            currentUserId={currentUserId}
+            onCommentsChange={(comments) => setTicket({ ...ticket, comments })}
+          />
 
           {/* Informações da escola que criou o chamado */}
           {ticket.createdBy.school && (

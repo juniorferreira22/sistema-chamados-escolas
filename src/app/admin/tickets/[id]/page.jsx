@@ -78,6 +78,7 @@ export default async function AdminTicketDetail({ params: paramsPromise }) {
           ticket={ticket}
           technicians={technicians}
           currentTechnicianId={user.technician.id}
+          currentUserId={user.id}
         />
       </main>
     </div>
