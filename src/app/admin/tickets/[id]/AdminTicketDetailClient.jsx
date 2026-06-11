@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import TicketComments from '@/components/TicketComments'
 import {
@@ -21,6 +21,34 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
   const [error, setError] = useState('')
   
   const isOverdue = isTicketOverdue(ticket.validUntil, ticket.status)
+
+  useEffect(() => {
+    let ignore = false
+
+    const loadTicketDetails = async () => {
+      setTicket(initialTicket)
+
+      try {
+        const res = await fetch(`/api/tickets/${initialTicket.id}`)
+
+        if (!res.ok) return
+
+        const data = await res.json()
+
+        if (!ignore) {
+          setTicket(data.ticket)
+        }
+      } catch (err) {
+        console.error('Erro ao carregar detalhes do chamado:', err)
+      }
+    }
+
+    loadTicketDetails()
+
+    return () => {
+      ignore = true
+    }
+  }, [initialTicket])
 
   const handleAssignTechnician = async (technicianId) => {
     setError('')

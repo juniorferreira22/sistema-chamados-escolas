@@ -98,7 +98,14 @@ export default function AdminShell({ user, initialTickets, technicians }) {
     }
 
     if (view === 'ticket' && activeTicket) {
-      return <AdminTicketDetailClient ticket={activeTicket} technicians={technicians} currentTechnicianId={user.technician?.id} />
+      return (
+        <AdminTicketDetailClient
+          ticket={activeTicket}
+          technicians={technicians}
+          currentTechnicianId={user.technician?.id}
+          currentUserId={user.id}
+        />
+      )
     }
 
     return null

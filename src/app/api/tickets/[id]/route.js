@@ -23,6 +23,7 @@ export async function GET(request, { params: paramsPromise }) {
             id: true,
             name: true,
             login: true,
+            school: true,
           },
         },
         assignedTo: {
@@ -199,6 +200,7 @@ export async function PATCH(request, { params: paramsPromise }) {
             id: true,
             name: true,
             login: true,
+            school: true,
           },
         },
         assignedTo: {

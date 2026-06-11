@@ -95,6 +95,7 @@ export async function POST(request, { params: paramsPromise }) {
             id: true,
             name: true,
             login: true,
+            school: true,
           },
         },
         assignedTo: {
