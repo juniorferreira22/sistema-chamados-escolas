@@ -68,7 +68,7 @@ export default function AdminShell({ user, initialTickets, technicians }) {
             emAtendimento: tickets.filter(t => t.status === 'EM_ATENDIMENTO').length,
             pendentes: tickets.filter(t => t.status === 'PENDENTE_TERCEIROS').length,
             aguardandoFeedback: tickets.filter(t => t.status === 'CONCLUIDO_AGUARDANDO_FEEDBACK').length,
-            atrasados: tickets.filter(t => !['FINALIZADO', 'CANCELADO', 'NAO_RESOLVIDO'].includes(t.status) && new Date() > new Date(t.validUntil)).length,
+            atrasados: tickets.filter(t => !['CONCLUIDO_AGUARDANDO_FEEDBACK','FINALIZADO', 'CANCELADO', 'NAO_RESOLVIDO'].includes(t.status) && new Date() > new Date(t.validUntil)).length,
           }}
         />
       )

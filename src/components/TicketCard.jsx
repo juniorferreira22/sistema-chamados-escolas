@@ -14,7 +14,8 @@ import {
 export default function TicketCard({ ticket, isAdmin = false }) {
   const isOverdue = isTicketOverdue(ticket.validUntil, ticket.status)
   const baseUrl = isAdmin ? '/admin' : '/escola'
-
+  const FinalizedNoFB = isOverdue && !['CONCLUIDO_AGUARDANDO_FEEDBACK','FINALIZADO', 'CANCELADO', 'NAO_RESOLVIDO'].includes(ticket.status)
+  
   return (
     <Link href={`${baseUrl}/tickets/${ticket.id}`}>
       <div className="group relative bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 hover:border-gray-300 hover:shadow-lg cursor-pointer transition-all duration-300 active:scale-95 sm:active:scale-100 overflow-hidden">
@@ -60,7 +61,7 @@ export default function TicketCard({ ticket, isAdmin = false }) {
               <span className="truncate text-gray-600">{getRelativeTime(ticket.createdAt)}</span>
             </div>
 
-            {isOverdue && (
+            { FinalizedNoFB && (
               <div className="flex items-center gap-2 text-red-600 font-semibold min-w-max">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -82,7 +83,7 @@ export default function TicketCard({ ticket, isAdmin = false }) {
           </div>
 
           {/* Indicador de quantos dias faltam até vencer */}
-          {!['FINALIZADO', 'CANCELADO', 'NAO_RESOLVIDO'].includes(ticket.status) && (
+          {!['CONCLUIDO_AGUARDANDO_FEEDBACK','FINALIZADO', 'CANCELADO', 'NAO_RESOLVIDO'].includes(ticket.status) && (
             <div className="mt-5 pt-4 border-t border-gray-100">
               <div className="flex items-center justify-between text-xs text-gray-500 mb-2.5">
                 <span className="font-semibold">Válido até</span>
@@ -93,7 +94,7 @@ export default function TicketCard({ ticket, isAdmin = false }) {
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div 
                   className={`h-full transition-all duration-500 rounded-full ${
-                    isOverdue ? 'bg-red-500' : 'bg-gradient-to-r from-blue-400 to-blue-600'
+                    FinalizedNoFB ? 'bg-red-500' : 'bg-gradient-to-r from-blue-400 to-blue-600'
                   }`}
                   style={{
                     width: isOverdue ? '100%' : `${Math.min(

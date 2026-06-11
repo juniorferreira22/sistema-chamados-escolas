@@ -148,7 +148,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
               </div>
             </div>
 
-            {isOverdue && !['FINALIZADO', 'CANCELADO', 'NAO_RESOLVIDO'].includes(ticket.status) && (
+            {isOverdue && !['CONCLUIDO_AGUARDANDO_FEEDBACK','FINALIZADO', 'CANCELADO', 'NAO_RESOLVIDO'].includes(ticket.status) && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -177,7 +177,7 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
               </div>
               <div>
                 <p className="text-xs text-slate-600 mb-1">Válido até</p>
-                <p className={`text-sm font-medium ${isOverdue ? 'text-red-600' : 'text-slate-900'}`}>
+                <p className={`text-sm font-medium ${isOverdue && ticket.status !== 'CONCLUIDO_AGUARDANDO_FEEDBACK' ? 'text-red-600' : 'text-slate-900'}`}>
                   {formatDate(ticket.validUntil, 'dd/MM/yyyy')}
                 </p>
               </div>
