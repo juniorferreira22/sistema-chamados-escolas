@@ -3,10 +3,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { formatDate, getRelativeTime } from '@/lib/utils'
 
-export default function TicketComments({ ticket, onCommentsChange, currentUserId, canComment = true }) {
+export default function TicketComments({ ticket, onCommentsChange, currentUserId, canComment = true, canManageComments = false }) {
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const [editingCommentId, setEditingCommentId] = useState('')
+  const [editingContent, setEditingContent] = useState('')
+  const [editingLoading, setEditingLoading] = useState(false)
   const [error, setError] = useState('')
   const comments = [...(ticket.comments || [])].sort(
     (first, second) => new Date(first.createdAt) - new Date(second.createdAt)
@@ -77,6 +80,55 @@ export default function TicketComments({ ticket, onCommentsChange, currentUserId
     }
   }
 
+  const startEditing = (comment) => {
+    setError('')
+    setEditingCommentId(comment.id)
+    setEditingContent(comment.content)
+  }
+
+  const cancelEditing = () => {
+    setEditingCommentId('')
+    setEditingContent('')
+  }
+
+  const handleEditSubmit = async (event) => {
+    event.preventDefault()
+
+    const message = editingContent.trim()
+
+    if (!message) {
+      setError('Digite uma mensagem para salvar')
+      return
+    }
+
+    setError('')
+    setEditingLoading(true)
+
+    try {
+      const res = await fetch(`/api/tickets/${ticket.id}/comments`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          commentId: editingCommentId,
+          content: message,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao editar comentÃ¡rio')
+      }
+
+      onCommentsChange(data.comments)
+      cancelEditing()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setEditingLoading(false)
+    }
+  }
+
   return (
     <div className="card">
       <div className="flex items-center justify-between gap-4 mb-4">
@@ -112,6 +164,8 @@ export default function TicketComments({ ticket, onCommentsChange, currentUserId
         ) : (
           comments.map((comment) => {
             const isMine = comment.authorId === currentUserId
+            const canEditComment = isMine || canManageComments
+            const isEditing = editingCommentId === comment.id
 
             return (
               <div key={comment.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
@@ -128,10 +182,50 @@ export default function TicketComments({ ticket, onCommentsChange, currentUserId
                       {getRelativeTime(comment.createdAt)}
                     </span>
                   </div>
-                  <p className="text-sm whitespace-pre-wrap break-words">{comment.content}</p>
+                  {isEditing ? (
+                    <form onSubmit={handleEditSubmit} className="space-y-3">
+                      <textarea
+                        rows={3}
+                        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-60"
+                        value={editingContent}
+                        onChange={(event) => setEditingContent(event.target.value)}
+                        disabled={editingLoading}
+                      />
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={cancelEditing}
+                          disabled={editingLoading}
+                          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={editingLoading || !editingContent.trim()}
+                          className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
+                        >
+                          {editingLoading ? 'Salvando...' : 'Salvar'}
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <p className="text-sm whitespace-pre-wrap break-words">{comment.content}</p>
+                  )}
                   <p className={`text-[11px] mt-2 ${isMine ? 'text-primary-100' : 'text-slate-500'}`}>
                     {formatDate(comment.createdAt)}
                   </p>
+                  {canEditComment && !isEditing && (
+                    <button
+                      type="button"
+                      onClick={() => startEditing(comment)}
+                      className={`mt-2 text-[11px] font-semibold underline-offset-2 hover:underline ${
+                        isMine ? 'text-primary-100 hover:text-white' : 'text-slate-500 hover:text-slate-700'
+                      }`}
+                    >
+                      Editar
+                    </button>
+                  )}
                 </div>
               </div>
             )
