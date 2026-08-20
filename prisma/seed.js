@@ -90,8 +90,8 @@ async function main() {
         school: {
           create: {
             address: school.address,
-            phone: `(16) 3251-${String(1000 + i).slice(1)}`,
-            email: `escola${loginNumber}@educacao.guariba.sp.gov.br`,
+            phone: ``,
+            email: ``,
             district: school.district,
             inep: `35${String(700000 + i)}`,
           },
@@ -108,7 +108,6 @@ async function main() {
   console.log('   tecnico1 / tecnico123');
   console.log('   tecnico2 / tecnico123');
   console.log('\n🏫 ESCOLAS:');
-  console.log('   escola01 / escola01123 (até escola22 / escola22123)');
 }
 
 main()

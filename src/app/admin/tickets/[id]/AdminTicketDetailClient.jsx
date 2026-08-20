@@ -207,7 +207,6 @@ export default function AdminTicketDetailClient({ ticket: initialTicket, technic
           <TicketComments
             ticket={ticket}
             currentUserId={currentUserId}
-            canManageComments
             onCommentsChange={(comments) => setTicket({ ...ticket, comments })}
           />
 
